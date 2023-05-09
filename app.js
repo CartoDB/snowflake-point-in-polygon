@@ -4,14 +4,15 @@ import { Deck } from '@deck.gl/core';
 import { CartoLayer, MAP_TYPES, setDefaultCredentials } from '@deck.gl/carto';
 import { EditableGeoJsonLayer } from "@nebula.gl/layers";
 import { DrawPolygonMode } from "@nebula.gl/edit-modes";
-import { countPointsInPolygonGeom, countPointsInPolygonQuadbin } from './pointInPolygon.js';
+import { countPointsInPolygonGeom, countPointsInPolygonQuadbin, getLayerQuery } from './pointInPolygon.js';
 
 const INITIAL_VIEW_STATE = {
   latitude: 40.74647536820825,
   longitude: -73.99917720586467,
   zoom: 16,
   bearing: 0,
-  pitch: 30
+  pitch: 30,
+  minZoom: 14
 };
 
 let editLayerData = {
@@ -19,7 +20,7 @@ let editLayerData = {
   features: []
 }
 
-let deck, accessToken;
+let deck, accessToken, currentPolygon;
 
 function getLayers() {
   const editLayer = new EditableGeoJsonLayer({
@@ -43,11 +44,13 @@ function getLayers() {
      
       if (editType === "addFeature") {
         const geojsonFeature = updatedData.features[updatedData.features.length - 1];
+        currentPolygon = geojsonFeature.geometry;
         editLayerData = {
           type: "FeatureCollection",
           features: [geojsonFeature]
         };
-        runPointInPolygon(geojsonFeature.geometry);
+        console.log(getLayerQuery(currentPolygon))
+        runPointInPolygon(currentPolygon);
 
       } else {
         editLayerData = updatedData;
@@ -55,7 +58,16 @@ function getLayers() {
       deck.setProps({ layers: getLayers() });
     }
   });
-  return [editLayer];
+
+  const intersectionLayer = currentPolygon && new CartoLayer({
+    connection: 'carto-snowflake-demo',   
+    type: MAP_TYPES.QUERY,
+    data: getLayerQuery(currentPolygon),
+    pointRadiusMinPixels: 4,
+    getFillColor: [200, 0, 80]
+  })
+
+  return [editLayer, intersectionLayer];
 }
 
 function runPointInPolygon(polygon) {
@@ -63,12 +75,13 @@ function runPointInPolygon(polygon) {
   const start = new Date().getTime();
 
   const elGeom = document.getElementById('calculation_geom');
-  elGeom.innerHTML = 'Executing query...';
-  countPointsInPolygonGeom({ polygon, accessToken }).then((count) => {
-    const finish = new Date().getTime();
-    const elapsedInSeconds = (finish - start) / 1000;
-    elGeom.innerHTML = `Query executed in ${elapsedInSeconds} seconds. ${count} points found.`;
-  })
+  elGeom.innerHTML = 'Disabled';
+  // elGeom.innerHTML = 'Executing query...';
+  // countPointsInPolygonGeom({ polygon, accessToken }).then((count) => {
+  //   const finish = new Date().getTime();
+  //   const elapsedInSeconds = (finish - start) / 1000;
+  //   elGeom.innerHTML = `Query executed in ${elapsedInSeconds} seconds. ${count} points found.`;
+  // })
 
   const elQuadbin = document.getElementById('calculation_quadbin');
   elQuadbin.innerHTML = 'Executing query...';
@@ -83,18 +96,13 @@ export function initApp(pAccessToken) {
 
   accessToken = pAccessToken;
 
+  setDefaultCredentials({accessToken})
+
    deck = new Deck({
     canvas: 'deck-canvas',
     initialViewState: INITIAL_VIEW_STATE,
     controller: true,
     layers: [ getLayers() ]
-      // new CartoLayer({
-      //   connection: 'carto_dw',
-      //   type: MAP_TYPES.TABLE,
-      //   data: 'cartobq.public_account.populated_places',
-      //   pointRadiusMinPixels: 2,
-      //   getFillColor: [200, 0, 80]
-      // })
   })
 
   // Add basemap
