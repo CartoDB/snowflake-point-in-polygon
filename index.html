@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="https://app.carto.com/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="https://app.carto.com/favicon/favicon-16x16.png"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link href="./styles.css" rel="stylesheet" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CARTO Auth SPA example</title>
+  </head>
+  <body>
+    <div id="app" class="root">
+      <div id="loggedOutContainer" class="login">
+        <img
+          src="carto-logo.svg"
+          loading="lazy"
+          height="48"
+          alt="CARTO"
+          class="login__logo"
+        />
+        <button id="login" class="button login__button">Login</button>
+      </div>
+
+      <div id="loggedContainer" class="logged-in">
+        <header class="header">
+          <img src="carto-logo.svg" loading="lazy" height="32" alt="CARTO" />
+          <div class="header__info">
+            <div id="profile" class="profile"></div>
+            <button id="logout" class="button button--secondary">Logout</button>
+          </div>
+        </header>
+
+        <div class="container">
+          <div class="sidebar">
+            <div class="sidebar__item">
+              <h2 class="sidebar__title">Calculation with geoms</h2>
+              <div id="calculation_geom"></div>
+              <h2 class="sidebar__title">Calculation with Quadbins</h2>
+              <div id="calculation_quadbin"></div>
+            </div>
+          </div> 
+
+          <div class="content">
+            <div id="map"></div>
+            <canvas id="deck-canvas"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
