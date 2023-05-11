@@ -20,9 +20,9 @@ export async function countPointsInPolygonGeom({polygon, accessToken}) {
       FROM CARTO_SNOWFLAKE_DEMO.ATT.SAMPLE_POINT_1B
     WHERE ST_Intersects(geom, TO_GEOGRAPHY('${JSON.stringify(polygon)}'))
   `;
-  // const r = await executeQuery({ query, accessToken });
-  // return r.rows[0].N
-  return 0
+  const r = await executeQuery({ query, accessToken });
+  return r.rows[0].N
+  //return 0
 }
 
 export async function countPointsInPolygonQuadbin({polygon, accessToken}) {
