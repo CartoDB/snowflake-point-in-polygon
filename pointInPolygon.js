@@ -1,5 +1,5 @@
 
-const API_BASE_URL = "https://gcp-us-east1.api.carto.com";
+const API_BASE_URL = "https://direct-gcp-us-east1.api.carto.com";
 const CONNECTION = "carto-snowflake-demo";
 const RESOLUTION = 22;
 

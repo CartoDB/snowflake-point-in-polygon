@@ -75,13 +75,13 @@ function runPointInPolygon(polygon) {
   const start = new Date().getTime();
 
   const elGeom = document.getElementById('calculation_geom');
-  elGeom.innerHTML = 'Disabled';
-  // elGeom.innerHTML = 'Executing query...';
-  // countPointsInPolygonGeom({ polygon, accessToken }).then((count) => {
-  //   const finish = new Date().getTime();
-  //   const elapsedInSeconds = (finish - start) / 1000;
-  //   elGeom.innerHTML = `Query executed in ${elapsedInSeconds} seconds. ${count} points found.`;
-  // })
+  // elGeom.innerHTML = 'Disabled';
+  elGeom.innerHTML = 'Executing query...';
+  countPointsInPolygonGeom({ polygon, accessToken }).then((count) => {
+    const finish = new Date().getTime();
+    const elapsedInSeconds = (finish - start) / 1000;
+    elGeom.innerHTML = `Query executed in ${elapsedInSeconds} seconds. ${count} points found.`;
+  })
 
   const elQuadbin = document.getElementById('calculation_quadbin');
   elQuadbin.innerHTML = 'Executing query...';
