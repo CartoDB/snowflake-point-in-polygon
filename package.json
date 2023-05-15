@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite --https",
+    "dev": "vite --https --host=127.0.0.1",
     "build": "vite build",
     "preview": "vite preview"
   },

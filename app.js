@@ -60,7 +60,7 @@ function getLayers() {
   });
 
   const intersectionLayer = currentPolygon && new CartoLayer({
-    connection: 'carto-snowflake-demo',   
+    connection: 'sf-geospatial-tst',   
     type: MAP_TYPES.QUERY,
     data: getLayerQuery(currentPolygon),
     pointRadiusMinPixels: 4,
