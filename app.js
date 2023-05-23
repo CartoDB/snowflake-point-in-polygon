@@ -4,7 +4,7 @@ import { Deck } from '@deck.gl/core';
 import { CartoLayer, MAP_TYPES, setDefaultCredentials } from '@deck.gl/carto';
 import { EditableGeoJsonLayer } from "@nebula.gl/layers";
 import { DrawPolygonMode } from "@nebula.gl/edit-modes";
-import { countPointsInPolygonGeom, countPointsInPolygonQuadbin, getLayerQuery } from './pointInPolygon.js';
+import { countPointsInPolygonGeom, countPointsInPolygonQuadbin, countPointsInPolygonLatLng, getLayerQuery } from './pointInPolygon.js';
 
 const INITIAL_VIEW_STATE = {
   latitude: 40.74647536820825,
@@ -89,6 +89,14 @@ function runPointInPolygon(polygon) {
     const finish = new Date().getTime();
     const elapsedInSeconds = (finish - start) / 1000;
     elQuadbin.innerHTML = `Query executed in ${elapsedInSeconds} seconds. ${count} points found.`;
+  })
+
+  const elLatLng = document.getElementById('calculation_latlng');
+  elLatLng.innerHTML = 'Executing query...';
+  countPointsInPolygonLatLng({ polygon, accessToken }).then((count) => {
+    const finish = new Date().getTime();
+    const elapsedInSeconds = (finish - start) / 1000;
+    elLatLng.innerHTML = `Query executed in ${elapsedInSeconds} seconds. ${count} points found.`;
   })
 }
 

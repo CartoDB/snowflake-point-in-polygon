@@ -16,6 +16,7 @@
     "@deck.gl/carto": "^8.9.9",
     "@nebula.gl/edit-modes": "^1.0.4",
     "@nebula.gl/layers": "^1.0.4",
+    "@turf/bbox": "^6.5.0",
     "@vitejs/plugin-basic-ssl": "^1.0.1",
     "maplibre-gl": "^2.4.0"
   }
