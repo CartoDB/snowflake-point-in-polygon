@@ -2,10 +2,15 @@
 import bbox from '@turf/bbox';
 
 const API_BASE_URL = "https://direct-gcp-us-east1.api.carto.com";
-const CONNECTION = "sf-geospatial-tst";
 const RESOLUTION = 22;
-const GEOM_TABLE = '"TMP_SB"."DATA"."CELL_TOWER_GEOG_CARTO_1B"'
-const QUADBIN_TABLE = '"TMP_SB"."DATA"."CELL_TOWER_GEOG_CARTO_1B_QDBN"'
+
+// const CONNECTION = "sf-geospatial-tst";
+// const GEOM_TABLE = '"TMP_SB"."DATA"."CELL_TOWER_GEOG_CARTO_1B"'
+// const QUADBIN_TABLE = '"TMP_SB"."DATA"."CELL_TOWER_GEOG_CARTO_1B_QDBN"'
+
+const CONNECTION = "carto-snowflake-demo";
+const GEOM_TABLE = '"CARTO_SNOWFLAKE_DEMO"."ATT"."SAMPLE_POINT_1B"'
+const QUADBIN_TABLE = '"CARTO_SNOWFLAKE_DEMO"."ATT"."SAMPLE_POINT_1B_QUADBIN"'
 
 async function executeQuery({query, accessToken}) {
   const url = `${API_BASE_URL}/v3/sql/${CONNECTION}/query?q=${encodeURI(query)}`;
