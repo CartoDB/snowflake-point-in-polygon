@@ -4,13 +4,16 @@ import bbox from '@turf/bbox';
 const API_BASE_URL = "https://direct-gcp-us-east1.api.carto.com";
 const RESOLUTION = 22;
 
-// const CONNECTION = "sf-geospatial-tst";
-// const GEOM_TABLE = '"TMP_SB"."DATA"."CELL_TOWER_GEOG_CARTO_1B"'
-// const QUADBIN_TABLE = '"TMP_SB"."DATA"."CELL_TOWER_GEOG_CARTO_1B_QDBN"'
+export const CONNECTION = "sf-geospatial-tst";
+const GEOM_TABLE = '"TMP_SB"."DATA"."CELL_TOWER_GEOG_CARTO_1B"'
+const QUADBIN_TABLE = '"TMP_SB"."DATA"."CELL_TOWER_GEOG_CARTO_1B_QDBN"'
+const GEO_COLUMN = 'geog'
 
-const CONNECTION = "carto-snowflake-demo";
-const GEOM_TABLE = '"CARTO_SNOWFLAKE_DEMO"."ATT"."SAMPLE_POINT_1B"'
-const QUADBIN_TABLE = '"CARTO_SNOWFLAKE_DEMO"."ATT"."SAMPLE_POINT_1B_QUADBIN"'
+// export const CONNECTION = "carto-snowflake-demo";
+// const GEOM_TABLE = '"CARTO_SNOWFLAKE_DEMO"."ATT"."SAMPLE_POINT_1B"'
+// const QUADBIN_TABLE = '"CARTO_SNOWFLAKE_DEMO"."ATT"."SAMPLE_POINT_1B_QUADBIN"'
+// const GEO_COLUMN = 'geom'
+
 
 async function executeQuery({query, accessToken}) {
   const url = `${API_BASE_URL}/v3/sql/${CONNECTION}/query?q=${encodeURI(query)}`;
@@ -27,7 +30,7 @@ export async function countPointsInPolygonGeom({polygon, accessToken}) {
   const query = `
     SELECT count(*) as n 
       FROM ${GEOM_TABLE}
-    WHERE ST_Intersects(GEOG, TO_GEOGRAPHY('${JSON.stringify(polygon)}'))
+    WHERE ST_Intersects(${GEO_COLUMN}, TO_GEOGRAPHY('${JSON.stringify(polygon)}'))
   `;
   const r = await executeQuery({ query, accessToken });
   return r.rows[0].N
@@ -59,7 +62,7 @@ export async function countPointsInPolygonLatLng({polygon, accessToken}) {
       LATITUDE >= ${bb[1]} AND LATITUDE <= ${bb[3]} AND
       LONGITUDE >= ${bb[0]} AND LONGITUDE <= ${bb[2]} 
       AND
-        ST_Within(GEOG, TO_GEOGRAPHY('${JSON.stringify(polygon)}'))
+        ST_Within(${GEO_COLUMN}, TO_GEOGRAPHY('${JSON.stringify(polygon)}'))
   `;
 
   const r = await executeQuery({ query, accessToken });
@@ -79,9 +82,9 @@ export function getLayerQuery(polygon) {
         FROM ${QUADBIN_TABLE}
         WHERE quadbin_22 IN ( select quadbin from low_quadbins)
     )
-    SELECT GEOG as geom 
+    SELECT ${GEO_COLUMN} as geom
       FROM ${GEOM_TABLE} a , quadbins
       WHERE a.quadbin_22 = quadbins.quadbin_22
-      AND ST_Intersects(a.GEOG, TO_GEOGRAPHY('${JSON.stringify(polygon)}'))
+      AND ST_Intersects(a.${GEO_COLUMN}, TO_GEOGRAPHY('${JSON.stringify(polygon)}'))
     `;
 }

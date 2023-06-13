@@ -4,7 +4,7 @@ import { Deck } from '@deck.gl/core';
 import { CartoLayer, MAP_TYPES, setDefaultCredentials } from '@deck.gl/carto';
 import { EditableGeoJsonLayer } from "@nebula.gl/layers";
 import { DrawPolygonMode } from "@nebula.gl/edit-modes";
-import { countPointsInPolygonGeom, countPointsInPolygonQuadbin, countPointsInPolygonLatLng, getLayerQuery } from './pointInPolygon.js';
+import { countPointsInPolygonGeom, countPointsInPolygonQuadbin, countPointsInPolygonLatLng, getLayerQuery, CONNECTION } from './pointInPolygon.js';
 
 const INITIAL_VIEW_STATE = {
   latitude: 40.74647536820825,
@@ -60,7 +60,7 @@ function getLayers() {
   });
 
   const intersectionLayer = currentPolygon && new CartoLayer({
-    connection: 'sf-geospatial-tst',   
+    connection: CONNECTION,   
     type: MAP_TYPES.QUERY,
     data: getLayerQuery(currentPolygon),
     pointRadiusMinPixels: 4,
