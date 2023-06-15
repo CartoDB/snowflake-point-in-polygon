@@ -59,15 +59,17 @@ function getLayers() {
     }
   });
 
-  const intersectionLayer = currentPolygon && new CartoLayer({
-    connection: CONNECTION,   
-    type: MAP_TYPES.QUERY,
-    data: getLayerQuery(currentPolygon),
-    pointRadiusMinPixels: 4,
-    getFillColor: [200, 0, 80]
-  })
+  // const intersectionLayer = currentPolygon && new CartoLayer({
+  //   connection: CONNECTION,   
+  //   type: MAP_TYPES.QUERY,
+  //   data: getLayerQuery(currentPolygon),
+  //   pointRadiusMinPixels: 4,
+  //   getFillColor: [200, 0, 80]
+  // })
 
-  return [editLayer, intersectionLayer];
+  const intersectionLayer = null;
+
+  return [editLayer, intersectionLayer]
 }
 
 function runPointInPolygon(polygon) {
@@ -81,6 +83,9 @@ function runPointInPolygon(polygon) {
     const finish = new Date().getTime();
     const elapsedInSeconds = (finish - start) / 1000;
     elGeom.innerHTML = `Query executed in ${elapsedInSeconds} seconds. ${count} points found.`;
+  }).catch((error) => {
+    elGeom.innerHTML = `Error: 60s timeout reached.`;
+    console.log(error)
   })
 
   const elQuadbin = document.getElementById('calculation_quadbin');
@@ -89,6 +94,8 @@ function runPointInPolygon(polygon) {
     const finish = new Date().getTime();
     const elapsedInSeconds = (finish - start) / 1000;
     elQuadbin.innerHTML = `Query executed in ${elapsedInSeconds} seconds. ${count} points found.`;
+  }).catch((error) => {
+    elQuadbin.innerHTML = `Error: 60s timeout reached.`;
   })
 
   const elLatLng = document.getElementById('calculation_latlng');
@@ -97,6 +104,8 @@ function runPointInPolygon(polygon) {
     const finish = new Date().getTime();
     const elapsedInSeconds = (finish - start) / 1000;
     elLatLng.innerHTML = `Query executed in ${elapsedInSeconds} seconds. ${count} points found.`;
+  }).catch((error) => {
+    elLatLng.innerHTML = `Error: 60s timeout reached.`;
   })
 }
 

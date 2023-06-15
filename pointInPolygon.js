@@ -5,9 +5,11 @@ const API_BASE_URL = "https://direct-gcp-us-east1.api.carto.com";
 const RESOLUTION = 22;
 
 export const CONNECTION = "sf-geospatial-tst";
-const GEOM_TABLE = '"TMP_SB"."DATA"."CELL_TOWER_GEOG_CARTO_1B"'
-const QUADBIN_TABLE = '"TMP_SB"."DATA"."CELL_TOWER_GEOG_CARTO_1B_QDBN"'
-const GEO_COLUMN = 'geog'
+const GEO_COLUMN = 'geog';
+// const GEOM_TABLE = '"TMP_SB"."DATA"."CELL_TOWER_GEOG_CARTO_1B"';
+// const QUADBIN_TABLE = '"TMP_SB"."DATA"."CELL_TOWER_GEOG_CARTO_1B_QDBN"';
+const GEOM_TABLE = '"TMP_SB"."DATA"."CELL_TOWER_GEOG_CARTO_146B"';
+const QUADBIN_TABLE = '"TMP_SB"."DATA"."CELL_TOWER_GEOG_CARTO_146B_QDBN"';
 
 // export const CONNECTION = "carto-snowflake-demo";
 // const GEOM_TABLE = '"CARTO_SNOWFLAKE_DEMO"."ATT"."SAMPLE_POINT_1B"'
@@ -34,7 +36,6 @@ export async function countPointsInPolygonGeom({polygon, accessToken}) {
   `;
   const r = await executeQuery({ query, accessToken });
   return r.rows[0].N
-  //return 0
 }
 
 export async function countPointsInPolygonQuadbin({polygon, accessToken}) {
@@ -67,7 +68,6 @@ export async function countPointsInPolygonLatLng({polygon, accessToken}) {
 
   const r = await executeQuery({ query, accessToken });
   return r.rows[0].N
-  //return 0
 }
 
 export function getLayerQuery(polygon) {
